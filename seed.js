@@ -1,6 +1,9 @@
-// seed.js
-// Run once with Turso + Blob env vars set:
-//   TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... BLOB_READ_WRITE_TOKEN=... node seed-remote.js
+// seed-remote.js
+// Run once with OIDC env vars set:
+//   node --env-file=.env.local seed-remote.js
+// (Or ensure VERCEL_OIDC_TOKEN and BLOB_STORE_ID are in your shell environment)
+
+require('dotenv').config({ path: '.env.local' });
 
 const fs = require('fs');
 const path = require('path');
@@ -10,7 +13,6 @@ const { db, initDb } = require('./database');
 
 const IMAGE_DIR = path.join(__dirname, 'seed-images');
 
-// name on disk -> { slug, name, price, old_price, category, description }
 const PRODUCTS = [
   {
     file: 'boxer-denim-combo.jpg',
@@ -91,12 +93,17 @@ const PRODUCTS = [
     let image_url = '';
     if (fs.existsSync(filePath)) {
       const buffer = fs.readFileSync(filePath);
+      
+      // OIDC AUTHENTICATION BLOCK
       const blob = await put(p.file, buffer, {
         access: 'public',
-        token: process.env.BLOB_READ_WRITE_TOKEN,
         addRandomSuffix: true,
-        contentType: 'image/jpeg'
+        contentType: 'image/jpeg',
+        // Pass OIDC credentials explicitly for local script execution
+        oidcToken: process.env.VERCEL_OIDC_TOKEN,
+        storeId: process.env.BLOB_STORE_ID,
       });
+      
       image_url = blob.url;
       console.log(`   ↳ uploaded ${p.file} → ${blob.url}`);
     } else {
@@ -111,6 +118,7 @@ const PRODUCTS = [
   }
 
   // ---- 2. admin user ----
+  // ... (keep your existing admin user creation logic) ...
   const adminEmail = 'admin@fastwear.local';
   const existingAdmin = (await db.execute({
     sql: 'SELECT id FROM users WHERE email = ?',
@@ -127,7 +135,7 @@ const PRODUCTS = [
   } else {
     console.log('ℹ️  Admin already exists.');
   }
-
+  
   console.log('\n🎉 Done.');
   process.exit(0);
 })().catch((err) => {
