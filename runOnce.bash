@@ -1,0 +1,6 @@
+# export env vars first (one-off, don't commit)
+export TURSO_DATABASE_URL="libsql://clothingline-theboss531.aws-ap-south-1.turso.io"
+export TURSO_AUTH_TOKEN="eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTMxNzg1MjAsImlkIjoiMDFhMTgxYzMtOTQwMS03YTdjLWJlMGEtMzI4MWZkN2QxMTRiIiwia2lkIjoiUTNWZFF5SFI3Ulhxc3hQa25ZM0FYWkExdjBLSmJ5WUNmQksweHJLcjNTbyIsInJpZCI6IjA3NWE5ZGM0LWU2NzgtNDkwNi1iOThhLTIzNzVlNGVhNWEzNyJ9.wMqokD-OldD7fiiOckyDaj_5OOy1s70WEJWxBF_JxNJ5FtSDMPhne4mlbV8zG2lauWXhlBPgSc8xUCWI8ye7BQ"
+export BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
+
+node seed-remote.js

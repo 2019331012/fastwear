@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Product | FastWear</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" href="/css/style.css" /></head><body>
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="side-menu" id="sideMenu">
+  <div class="side-menu-header"><span class="menu-title">Fast Wear</span><button class="close-menu" id="closeMenuBtn"><i class="fas fa-times"></i></button></div>
+  <ul><li><a href="/?category=boxer">Boxer</a></li><li><a href="/?category=tshirt">Polo T-Shirt</a></li><li><a href="/?category=drop-shoulder">Drop Shoulder</a></li><li><a href="/?category=denim">Denim</a></li><li><a href="/?category=hoodie">Hoodie</a></li></ul>
+  <div class="call-info"><i class="fas fa-phone-alt"></i> call @ 01748-711230</div>
+</nav>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header"><h3>Your Cart</h3><button class="close-menu" id="closeCartBtn"><i class="fas fa-times"></i></button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-drawer-footer"><div class="cart-total-row"><span>Total</span><span id="cartTotal">0.00৳</span></div><button class="btn-checkout" onclick="location.href='/cart'">View cart & checkout</button></div>
+</div>
+<div class="container">
+  <header class="site-header">
+    <div class="header-left"><button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button><div class="logo" onclick="location.href='/'"><i class="fas fa-bolt"></i> FastWear</div></div>
+    <div class="header-right">
+      <div class="cart-info" id="cartInfoBtn"><i class="fas fa-shopping-bag"></i><span class="amount" id="headerTotal">0.00৳</span><span id="headerCount">0</span></div>
+      <span id="userSlot"></span>
+    </div>
+  </header>
+  <div class="page-title"><h1 id="pageTitle">Loading…</h1><p id="pageBreadcrumb"></p></div>
+  <section class="product-detail" id="productDetail"><p style="width:100%;text-align:center;color:#999;">Loading…</p></section>
+  <footer class="site-footer"><p>© 2025 FastWear Lifestyle</p></footer>
+</div>
+<button class="scroll-top" id="scrollTopBtn"><i class="fas fa-arrow-up"></i></button>
+<div class="toast" id="toast"></div>
+<script src="/js/auth.js"></script><script src="/js/product.js"></script>
+</body></html>

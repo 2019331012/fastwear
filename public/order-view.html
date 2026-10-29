@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Order | FastWear</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" href="/css/style.css" /></head><body>
+<div class="container">
+  <header class="site-header">
+    <div class="header-left"><div class="logo" onclick="location.href='/'"><i class="fas fa-bolt"></i> FastWear</div></div>
+    <div class="header-right">
+      <div class="cart-info" id="cartInfoBtn"><i class="fas fa-shopping-bag"></i><span class="amount" id="headerTotal">0.00৳</span><span id="headerCount">0</span></div>
+      <span id="userSlot"></span>
+    </div>
+  </header>
+  <div class="page-title"><h1>Order confirmed</h1><p>We'll call you shortly to confirm delivery</p></div>
+  <div id="orderWrap"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/auth.js"></script>
+<script>
+(async function () {
+  await FW.wireSharedHeader();
+  const id = location.pathname.split('/').pop();
+  const usp = new URLSearchParams(location.search);
+  const token = usp.get('token') || localStorage.getItem('guest_order_' + id);
+  if (token) localStorage.setItem('guest_order_' + id, token);
+  let o;
+  try { o = await FW.api(`/api/orders/${id}${token ? '?token=' + encodeURIComponent(token) : ''}`); }
+  catch {
+    document.getElementById('orderWrap').innerHTML = '<p style="color:#c0392b;padding:2rem;text-align:center;">Order not found or you do not have access.</p>';
+    return;
+  }
+  document.getElementById('orderWrap').innerHTML = `
+    <div class="order-card">
+      <div class="order-head">
+        <div><h3>Order #${o.display_number}</h3><div style="color:#7a7a7a;font-size:.85rem;">${new Date(o.created_at + 'Z').toLocaleString()}</div></div>
+        <span class="order-status status-${o.status}">${o.status}</span>
+      </div>
+      <div>${o.items.map(i => `
+        <div class="summary-item">
+          <div>${i.image_url ? `<img src="${i.image_url}" alt="" />` : '<div style="width:50px;height:50px;background:#f4f2f0;border-radius:10px;"></div>'}</div>
+          <div class="summary-item-info"><div class="summary-item-name">${i.name}</div><div class="summary-item-meta">${FW.formatPrice(i.price)} × ${i.quantity}</div></div>
+          <div style="font-weight:600;font-size:.9rem;">${FW.formatPrice(i.price * i.quantity)}</div>
+        </div>`).join('')}
+      </div>
+      <div class="summary-total"><span>Total</span><span>${FW.formatPrice(o.total)}</span></div>
+      <div style="font-size:.85rem;color:#555;margin-top:1rem;line-height:1.7;">
+        <strong>Deliver to:</strong> ${o.shipping_name}<br/>
+        ${o.shipping_phone}${o.shipping_email ? ' · ' + o.shipping_email : ''}<br/>
+        ${o.shipping_address}<br/>
+        <strong>Payment:</strong> ${o.payment_method === 'cod' ? 'Cash on Delivery' : o.payment_method.toUpperCase()}
+      </div>
+      <div style="margin-top:1.2rem;font-size:.85rem;color:#7a7a7a;">
+        Keep this link to check your order status:<div style="word-break:break-all;color:#1e1e1e;">${location.href}</div>
+      </div>
+      <div style="margin-top:1.5rem;"><a href="/" class="btn-secondary" style="text-decoration:none;display:inline-block;">Continue shopping</a></div>
+    </div>`;
+})();
+</script>
+</body></html>
